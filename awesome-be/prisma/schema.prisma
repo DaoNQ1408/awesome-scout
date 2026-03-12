@@ -17,6 +17,9 @@ model UserProfile {
   updatedAt    DateTime @default(now()) @updatedAt @map("updated_at")
   lifeCycleStatus LifeCycleStatus @map("life_cycle_status")
 
+  role   Role @relation(fields: [roleId], references: [id])
+  roleId Int  @map("role_id")
+
   scoutProfile ScoutProfile?
 
   @@map("user_profiles")
@@ -38,9 +41,6 @@ model ScoutProfile {
 
   userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
   userProfileId Int         @unique @map("user_profile_id")
-
-  role   Role @relation(fields: [roleId], references: [id])
-  roleId Int  @map("role_id")
 
   profileDetails ProfileDetail[]
   camps Camp[]
@@ -138,7 +138,7 @@ model Role {
   lifeCycleStatus LifeCycleStatus @map("life_cycle_status")
 
   permissions   Permission[]
-  scoutProfile ScoutProfile[]
+  userProfiles UserProfile[]
 
   @@map("roles")
 }
