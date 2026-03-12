@@ -13,3 +13,150 @@ model HiTest {
   email String  @unique
   name  String?
 }
+
+model UserProfile {
+  id           Int      @id @default(autoincrement())
+  mail         String   @unique
+  username     String?  @unique
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at")
+  // status
+
+  scoutProfiles ScoutProfile?
+
+  @@map("user_profiles")
+}
+
+model ScoutProfile {
+  id        Int      @id @default(autoincrement())
+  code      String   @unique
+  lastName  String   @map("last_name")
+  firstName String   @map("first_name")
+  phone     String?
+  address   String
+  dob       DateTime
+  citizenId String   @unique @map("citizen_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  // status
+  // section
+
+  userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId Int         @unique @map("user_profile_id")
+
+  role   Role @relation(fields: [roleId], references: [id])
+  roleId Int  @map("role_id")
+
+  profileDetails ProfileDetail[]
+  attendees      WeeklyAttendance[] @relation("AttendeeRelation")
+  approvers      WeeklyAttendance[] @relation("ApprovedRelation")
+
+  // role
+
+  @@map("scout_profiles")
+}
+
+model ProfileDetail {
+  id          Int      @id @default(autoincrement())
+  imageUrl    String?  @map("image_url")
+  description String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
+  // status
+  // type: achievement, unit
+
+  scoutProfile   ScoutProfile @relation(fields: [scoutProfileId], references: [id])
+  scoutProfileId Int          @unique @map("scout_profile_id")
+
+  achievement   Achievement @relation(fields: [achievementId], references: [id])
+  achievementId Int         @map("achievement_id")
+
+  unit   Unit @relation(fields: [unitId], references: [id])
+  unitId Int  @map("unit_id")
+
+  @@map("profile_details")
+}
+
+model Achievement {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?  @db.Text
+  imageUrl    String?  @map("image_url")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
+  // status
+  // type: badge, rank
+  // section
+
+  profileDetails ProfileDetail[]
+
+  @@map("achievements")
+}
+
+model Unit {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(50)
+  description String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
+  // status
+  // section
+  // type: district, troop, group
+
+  districtUnitId      Int?
+  districtUnit        Unit?  @relation("DistrictUnits", fields: [districtUnitId], references: [id])
+  districtBelongUnits Unit[] @relation("DistrictUnits")
+
+  groupUnitId      Int?
+  groupUnit        Unit?  @relation("GroupUnits", fields: [groupUnitId], references: [id])
+  groupBelongUnits Unit[] @relation("GroupUnits")
+
+  profileDetails ProfileDetail[]
+
+  @@map("units")
+}
+
+model Permission {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
+  // status
+
+  roles Role[]
+
+  @@map("permissions")
+}
+
+model Role {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
+  // status
+
+  permissions   Permission[]
+  scoutProfiles ScoutProfile[]
+
+  @@map("roles")
+}
+
+model WeeklyAttendance {
+  id        Int      @id @default(autoincrement())
+  date      DateTime
+  isPresent Boolean  @default(false) @map("is_present")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  // status: pending, approved
+
+  attendee   ScoutProfile @relation("AttendeeRelation", fields: [attendeeId], references: [id])
+  attendeeId Int          @map("attendee_id")
+
+  approver   ScoutProfile @relation("ApprovedRelation", fields: [approverId], references: [id])
+  approverId Int          @map("approved_by_id")
+
+  @@map("weekly_attendance")
+}
