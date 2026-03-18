@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      # sample static route configuration
+      routes:
+        - id: iam-service-route
+          uri: lb://iam-service
+          predicates:
+            - Path=/api/v1/iam-service/**
+            -
+        - id: core-scout-service-route
+          uri: lb://core-scout-service
+          predicates:
+            - Path=/api/v1/core-scout-service/**
+
+
+server:
+  port: 8080
+
+eureka:
+  client:
+    service-url:
+        defaultZone: http://localhost:8761/eureka/
