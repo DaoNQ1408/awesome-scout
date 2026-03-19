@@ -6,8 +6,9 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.3</version>
-        <relativePath/> </parent>
+        <version>3.4.4</version>
+        <relativePath/>
+    </parent>
 
     <groupId>com.daonq</groupId>
     <artifactId>awesome-java</artifactId>
@@ -20,7 +21,7 @@
 
     <properties>
         <java.version>21</java.version>
-        <spring-cloud.version>2025.1.1</spring-cloud.version>
+        <spring-cloud.version>2024.0.1</spring-cloud.version>
     </properties>
 
     <dependencyManagement>
@@ -46,11 +47,6 @@
     <modules>
         <module>eureka-server</module>
         <module>api-gateway</module>
-        <module>iam-service</module>
-        <module>core-scout-service</module>
-        <module>event-service</module>
-        <module>gamification-service</module>
-        <module>finance-service</module>
     </modules>
 
 </project>
