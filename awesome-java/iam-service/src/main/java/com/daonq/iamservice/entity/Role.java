@@ -23,13 +23,17 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @Column(name = "name", unique = true, nullable = false)
     String name;
 
+    @Column(name = "description")
     String description;
 
+    @Column(name = "created_at", updatable = false)
     @CreationTimestamp
     LocalDateTime createdAt;
 
+    @Column(name = "updated_at")
     @UpdateTimestamp
     LocalDateTime updatedAt;
 
