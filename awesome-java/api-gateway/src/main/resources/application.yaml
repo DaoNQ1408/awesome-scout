@@ -5,14 +5,16 @@ spring:
     gateway:
       discovery:
         locator:
-          enabled: true
+          enabled: false
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
       routes:
         - id: iam-service
           uri: lb://iam-service
           predicates:
             - Path=/api/iam/**
           filters:
-            - StripPrefix=1
+            - StripPrefix=2
 
 server:
     port: 8080
