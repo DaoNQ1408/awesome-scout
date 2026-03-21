@@ -18,15 +18,17 @@ import java.util.List;
 public interface RoleMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "status", ignore = true)
     @Mapping(target = "permissions", ignore = true)
     @Mapping(target = "employees", ignore = true)
-    @Mapping(target = "permissions", ignore = true)
+    @Mapping(target = "userProfiles", ignore = true)
     Role toEntity(RoleRequest roleRequest);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "status", ignore = true)
     @Mapping(target = "permissions", ignore = true)
     @Mapping(target = "employees", ignore = true)
-    @Mapping(target = "permissions", ignore = true)
+    @Mapping(target = "userProfiles", ignore = true)
     Role updateEntity(RoleRequest roleRequest, @MappingTarget Role role);
 
     @Mapping(target = "permissions", expression = "java(toPermissionDtoList(role.getPermissions()))")
