@@ -104,3 +104,4 @@ chore(docker): add nginx config
 ---
 
 Happy coding 🚀
+#### © 2026 DaoNQ
