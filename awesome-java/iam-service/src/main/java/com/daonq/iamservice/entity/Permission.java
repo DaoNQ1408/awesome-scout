@@ -38,4 +38,11 @@ public class Permission {
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     PermissionStatus status;
+
+    @PrePersist
+    public void prePersist() {
+        if (status == null) {
+            status = PermissionStatus.ACTIVE;
+        }
+    }
 }

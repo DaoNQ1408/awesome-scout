@@ -1,6 +1,7 @@
 package com.daonq.iamservice.entity;
 
 import com.daonq.iamservice.enums.RoleStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -15,6 +16,7 @@ import java.util.List;
 @Table(name = "roles")
 @Getter
 @Setter
+@ToString(exclude = {"userProfiles", "permissions"})
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -41,6 +43,10 @@ public class Role {
     @Enumerated(EnumType.STRING)
     RoleStatus status;
 
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
+    List<UserProfile> userProfiles = new ArrayList<>();
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "role_permission",
@@ -48,4 +54,11 @@ public class Role {
             inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
     List<Permission> permissions = new ArrayList<>();
+
+    @PrePersist
+    public void prePersist() {
+        if (status == null) {
+            status = RoleStatus.ACTIVE;
+        }
+    }
 }
