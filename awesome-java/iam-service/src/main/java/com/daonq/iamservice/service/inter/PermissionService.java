@@ -11,6 +11,7 @@ public interface PermissionService {
     Permission getById(Long id);
     PermissionResponse getResponseById(Long id);
     List<PermissionResponse> getAll(PermissionStatus status);
+    List<Permission> getAllByIds(List<Long> ids);
     PermissionResponse create(PermissionRequest request);
     PermissionResponse update(Long id, PermissionRequest request);
     void delete(Long id);

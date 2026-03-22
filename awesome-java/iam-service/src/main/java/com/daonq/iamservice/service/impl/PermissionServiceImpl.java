@@ -52,6 +52,12 @@ public class PermissionServiceImpl implements PermissionService {
                 .toList();
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<Permission> getAllByIds(List<Long> ids) {
+        return permissionRepository.findAllById(ids);
+    }
+
 
     @Override
     @Transactional
